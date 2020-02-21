@@ -50,6 +50,13 @@ while (true) {
 }
 ```
 
+## Updating
+To update phgram to the lastest version, run this command in shell:
+`wget https://raw.githubusercontent.com/usernein/phgram/master/phgram.phar`
+
+Or run this php snippet:
+`copy('https://raw.githubusercontent.com/usernein/phgram/master/phgram.phar', 'phgram.phar');`
+
 ## BotAPI Methods
 phgram supports all methods and types described on the [official docs](https://core.telegram.org/bots/api).
 Just call any BotAPI method as a \phgram\Bot class method:
