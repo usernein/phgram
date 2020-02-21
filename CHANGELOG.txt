@@ -1,0 +1,51 @@
+[2019-10-29T14:39:53-03:00]
+- BotErrorHandler now uses statics methods. You should change from:
+$handler = new BotErrorHandler($bot, $admin);
+to:
+\phgram\BotErrorHandler::register($bot, $admin);
+
+- Now all phgram functions and classes are under the namespace \phgram. i.e. Bot becomes \phgram\Bot, ikb() becomes \phgram\ikb()
+You should change your code to use the qualified class names (with namespace), or just add these 2 lines before your code:
+use \phgram\{Bot, BotErrorHandler};
+use function \phgram\{ikb};
+If you use any other class, include it in the first line. In the same way, include any other function you use in the second line.
+
+- Now phgram, when possible, recursively converts the result of a method or a getter (Text(), ChatID(), etc) to BotAPI objects. You can get full info about them at README.md in the "BotAPI objects" section.
+
+- New shortcuts \phgram\Bot->delete($message_id = Bot->MessageID(), $chat_id = Bot->ChatID()) and editKeyboard($reply_markup, ...$params)
+
+- __call and all shortcuts have changed to accept a variable number of parameters. See more in "BotAPI objects" section at README.md
+
+- Now when you receive the report of an BotAPI error, you also receive the arguments that were sent to the request that failed.
+
+- Fixed: BotAPI errors reporting showing '[]' as result
+
+- Now kb() and ikb() doesn't return a JSON by default. It returns a \phgram\Objects\InlineKeyboardMarkup and \phgram\Objects\ReplyKeyboardMarkup objects. Don't worry, you can still pass them directly to a request, as you have been doing. Ah, these objects are pretty nice, you should read about them :))
+
+- Since curl doesn't accept multidimensional arrays as POSTFIELDS, it had been throwing "Array to string conversion" error when you passed a multidimensional parameters array (i don't know why would you do it, but ok).
+Now, if the parameters array is multidimensional, all its array elements get encoded to JSON before performing the request. What does this mean? Now 'reply_markup' doesn't need to be a JSON. It gets encoded just before the request. (This is very useful when passing a reply_markup to a inline result).
+
+- You can create custom shortcuts. Read about it in the README.md, at "phgram Methods" section
+
+- New data shortcuts Message() and ReplyMarkup
+
+- You can use the functions \phgram\entities_to_markdown amd \phgram\entities_to_html to generate the text with formatting based on the passed entities.
+$text = \phgram\entities_to_html($bot->Text(), $bot->Entities());
+
+- The shortcut ->append() (available in Message objects) now uses the entities parsers mentioned above. You can append texts without removing the formatting.
+
+- Now ArrayObj is Traversable and jsonSeriarizable :)))
+
+- Now you can pass a parameter 'postname' to the shortcut \phgram\Bot->doc if you want to send the file with a different name.
+
+- Now \phgram\BotErrorHandler also logs the handled error in ini_get('error_log')
+
+- If the text of the error report is greater than 4096, the reporter bot will try to send it as file
+
+- \phgram\version is now a date in the format DateTime::RFC3339
+
+- The parameters of kbtn, kb, forceReply and hide_kb have changed. Check them at the README.md
+
+- I removed all the blocks of comments (/** */) from the files because they was outdated and was only increasing the size of phgram.phar (i'll add it again in some next update. for now, use the README)
+
+- New static method \phgram\Bot::closeConnection() to return 200 OK, close the connection with the client and keep executing after
