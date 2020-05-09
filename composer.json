@@ -1,0 +1,38 @@
+{
+    "name": "usernein/phgram",
+    "description": "A simple Telegram Bot API client written in PHP7",
+    "type": "library",
+    "license": "MIT",
+    "authors": [{
+        "name": "Cezar H.",
+        "email": "cezar@amanoteam.com"
+    }],
+    "autoload": {
+        "psr-4": {
+            "usernein\\phgram\\": "src/usernein/phgram/"
+        },
+        "files": ["src/functions.php", "src/index.php"]
+    },
+    "require": {
+        "monolog/monolog": "2.x",
+        "bramus/monolog-colored-line-formatter": "~3.0"
+    },
+    "require-dev": {
+        "macfja/phar-builder": "~0.2"
+    },
+    "scripts": {
+        "update-version": "sed -Ei \"s/version = .+;/version = '$(cat VERSION)';/g\" src/index.php",
+        "build": "composer update-version && composer dumpautoload && vendor/bin/phar-builder package ./composer.json"
+    },
+    "extra": {
+        "phar-builder": {
+            "compression": "GZip",
+            "name": "phgram.phar",
+            "include": [],
+            "output-dir": "dist/",
+            "entry-point": "src/phar_index.php",
+            "include-dev": false,
+            "skip-shebang": true
+        }
+    }
+}

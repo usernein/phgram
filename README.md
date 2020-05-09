@@ -21,8 +21,8 @@ $text = $bot->Text();
 $chat_id = $bot->ChatID();
 
 if ($text == '/start') {
-	$bot->sendMessage(['chat_id' => $chat_id, 'text' => 'Hello World!']);
-	$bot->send('How are you?');
+    $bot->sendMessage(['chat_id' => $chat_id, 'text' => 'Hello World!']);
+    $bot->send('How are you?');
 }
 ```
 ### Long polling
@@ -33,20 +33,20 @@ $bot = new \phgram\Bot('TOKEN:HERE');
 
 $offset = 0;
 while (true) {
-	$updates = $bot->getUpdates(['offset' => $offset, 'timeout' => 300])['result'];
-	foreach ($updates as $key => $update) {
-		$bot->setData($update);
+    $updates = $bot->getUpdates(['offset' => $offset, 'timeout' => 300])['result'];
+    foreach ($updates as $key => $update) {
+        $bot->setData($update);
 
-		$text = $bot->Text();
-		$chat_id = $bot->ChatID();
+        $text = $bot->Text();
+        $chat_id = $bot->ChatID();
 
-		if ($text == '/start') {
-			$bot->sendMessage(['chat_id' => $chat_id, 'text' => 'Hello World!']);
-			$bot->send('How are you?');
-		}
-		
-		$offset = $update['update_id']+1;
-	}
+        if ($text == '/start') {
+            $bot->sendMessage(['chat_id' => $chat_id, 'text' => 'Hello World!']);
+            $bot->send('How are you?');
+        }
+        
+        $offset = $update['update_id']+1;
+    }
 }
 ```
 
@@ -120,12 +120,12 @@ $bot->send('<i>Hi, with HTML again!</i>);
 You can set new shortcuts by adding new elements into the array $bot->shortcuts. The key should be the shortcut name and the value should be an array with its info:
 ```php
 $bot->shortcuts['vid'] = [
-	'method' => 'sendVideo',
-	'default_parameters' => [
-		'chat_id' => function ($bot, $arguments) { return $bot->ChatID(); },
-		'parse_mode' => 'HTML',
-	],
-	'first_parameter' => 'file_id',
+    'method' => 'sendVideo',
+    'default_parameters' => [
+        'chat_id' => function ($bot, $arguments) { return $bot->ChatID(); },
+        'parse_mode' => 'HTML',
+    ],
+    'first_parameter' => 'file_id',
 ];
 $bot->vid($file_id);
 ```
@@ -232,7 +232,7 @@ All them are under \phgram namespace.
 Use this function to generate a InlineKeyboardMarkup object. Syntax:
 ```php
 $options = [
-	[ ['text', 'data', 'callback_data'] ]
+    [ ['text', 'data', 'callback_data'] ]
 ];
 $keyboard = \phgram\ikb($options);
 ```
@@ -253,9 +253,9 @@ So, for callback buttons, you can ommit the TYPE parameter. Check this example:
 require 'phgram.phar';
 $bot = new \phgram\Bot('TOKEN:HERE');
 $options = [
-	[ ['Callback 1', 'callback 1'], ['Callback 2', 'callback 2'] ],
-	['URl 1', 't.me/usernein', 'url'], ['URl 2', 't.me/hpxlist', 'url'] ],
-	['Inline 1', 'aleatory query', 'switch_inline_query'], ['Inline 2', 'another query', 'switch_inline_query_current_chat'] ]
+    [ ['Callback 1', 'callback 1'], ['Callback 2', 'callback 2'] ],
+    ['URl 1', 't.me/usernein', 'url'], ['URl 2', 't.me/hpxlist', 'url'] ],
+    ['Inline 1', 'aleatory query', 'switch_inline_query'], ['Inline 2', 'another query', 'switch_inline_query_current_chat'] ]
 ];
 $keyboard = \phgram\ikb($options);
 $bot->send('Testing', ['reply_markup' => $keyboard]);
@@ -291,8 +291,8 @@ $options is a array of lines. Each line might contain KeyboardButton objects (as
 Basic example:
 ```php
 $options = [
-	[ 'Button 1', 'Button 2' ],
-	[ ['Send contact', 'request_contact' => true] ]
+    [ 'Button 1', 'Button 2' ],
+    [ ['Send contact', 'request_contact' => true] ]
 ];
 
 $keyboard = \phgram\kb($options);
@@ -443,7 +443,7 @@ i.e. InlineKeyboardMarkup knows that its data is supposed to be used in a 'reply
 Another very cool thing you can do with these objects is to pass them to any method call, outside an associative array of parameters. Let's see an example with InlineKeyboardMarkup:
 ```php
 $keyboard = ikb([
-	[ ['Button', 'Data'] ]
+    [ ['Button', 'Data'] ]
 ]); # \phgram\Objects\InlineKeyboardMarkup
 
 # Normal mode
