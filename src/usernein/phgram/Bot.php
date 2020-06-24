@@ -129,10 +129,11 @@ class Bot {
         }, $content);
         
         $opts = [
-            CURLOPT_URL => $url,
-            CURLOPT_POSTFIELDS => $content,
+            CURLOPT_URL => $url
         ];
-        
+        if ($content)
+        	$opts[CURLOPT_POSTFIELDS] = $content;
+
         curl_setopt_array($this->CH, $opts);
         $result = curl_exec($this->CH);
         $response_code = curl_getinfo($this->CH, CURLINFO_HTTP_CODE);
