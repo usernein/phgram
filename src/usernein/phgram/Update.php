@@ -7,6 +7,7 @@
 namespace usernein\phgram;
 
 class Update extends ArrayObject {
+    public $raw;
     public $update_type;
     public $update_id;
     private $_bot;
@@ -17,6 +18,7 @@ class Update extends ArrayObject {
         if (!is_array($data))
             throw new TypeError("Argument 1 passed to Update::__construct must be an array or an instance of ArrayObject, ".type($data)." given");
         
+        $this->raw = json_decode(json_encode($data),1);
         if (isset($data['update_id'])) {
             $this->update_id = $data['update_id'];
             unset($data['update_id']);

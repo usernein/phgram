@@ -65,11 +65,13 @@ class Bot {
         ];
         curl_setopt_array($this->CH, $opts);
         
+        $is_cli = !http_response_code();
+        
         $default_settings = [
             'logging' => [
                 'logger' => null, # instance of \Monolog\Logger
                 'filename' => 'phgram.log', # file name for rotative log files
-                'level' => Logger::DEBUG, # level of the logging
+                'level' => $is_cli? Logger::DEBUG : Logger::NOTICE, # level of the logging
                 'max_files' => 7 # maximum quantity of rotated files
             ],
             'throw_errors' => false, # should phgram throw exceptions when a call to a method fails?
@@ -83,8 +85,6 @@ class Bot {
         
         if (!$this->settings['logging']['logger']) {
             $this->logger = new Logger('phgram');
-            
-            $is_cli = !http_response_code();
             
             $date_format = 'd/m/Y H:i:s O';
             
@@ -337,7 +337,7 @@ class Bot {
      * @return MethodResult|array The decoded result of the method
      */
     public function edit($text, array $params = []) {
-        $params += ['text' => $text, 'message_id' => $this->update->message_id, 'inline_message_id' => $this->Inlineupdate->message_id] + $this->_default_outgoing_arguments;
+        $params += ['text' => $text, 'message_id' => $this->update->find('message_id'), 'inline_message_id' => $this->update->inline_message_id] + $this->_default_outgoing_arguments;
         return $this->editMessageText($params);
     }
     
@@ -362,7 +362,7 @@ class Bot {
      * 
      * @return MethodResult|array The decoded result of the method
      */
-    public function action($action, array $params = []) {
+    public function action(string $action = 'typing', array $params = []) {
         $params += ['action' => $action] + $this->_default_outgoing_arguments;
         return $this->sendChatAction($params);
     }
@@ -406,7 +406,7 @@ class Bot {
      * @return MethodResult|array The decoded result of the method
      */
     public function answer_inline($results = [], array $params = []) {
-        $params += ['results' => $results, 'inline_query_id' => $this->update->inline_query['id'], 'cache_time' => 0];
+        $params += ['results' => $results, 'inline_query_id' => $this->update->id, 'cache_time' => 0];
         return $this->answerInlineQuery($params);
     }
     
@@ -419,7 +419,7 @@ class Bot {
      * @return MethodResult|array The decoded result of the method
      */
     public function answer_callback($text = '', array $params = []) {
-        $params += ['callback_query_id' => $this->update->callback_query['id'], 'text' => $text];
+        $params += ['callback_query_id' => $this->update->id, 'text' => $text];
         return $this->answerCallbackQuery($params);
     }
     

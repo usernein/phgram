@@ -95,7 +95,7 @@ class ArrayObject implements \ArrayAccess, \JsonSerializable, \IteratorAggregate
             }
         }
         
-        if (is_iterable($item) && !($item instanceof ArrayObject)) {
+        if (is_array($return) || is_object($return)) {
             $return = new ArrayObject($return);
         }
         return $return;
